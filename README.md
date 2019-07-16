@@ -1,6 +1,10 @@
 # [DHMovableExtension](https://github.com/DanielHusx/DHMovableExtension)
 
-优雅的长按Cell移动，针对UITableView与UICollectionView的Cell长按移动。耦合低，支持分组移动、可定制化移动，极易使用
+优雅的长按Cell移动，针对UITableView与UICollectionView的Cell长按移动。
+- 耦合低，代码侵入性低
+- 支持分组移动
+- 可定制化移动，设置不可移动位置或不可交换位置
+- 极易使用
 
 ## 使用方式
 
