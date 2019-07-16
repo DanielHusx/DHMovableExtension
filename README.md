@@ -125,9 +125,11 @@ self.tableView.dataSource = self;
 
 ## 效果图
 
-![tableGif](/Users/daniel/Desktop/tab.gif)
+![tableGif](https://github.com/DanielHusx/DHMovableExtension/blob/master/table.gif)
 
-![collectionGif](/Users/daniel/Desktop/coll.gif)
+
+
+![collectionGif](https://github.com/DanielHusx/DHMovableExtension/blob/master/collection.gif)
 
 > [DHMovableExtensionDemo](https://github.com/DanielHusx/DHMovableExtension)
 
