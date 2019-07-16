@@ -123,4 +123,11 @@ self.tableView.dataSource = self;
 - (void)movable_scrollView:(UIScrollView *)scrollView drawMovableCell:(UIView *)movableCell;
 ```
 
+## 效果图
+
+![tableGif](/Users/daniel/Desktop/tab.gif)
+
+![collectionGif](/Users/daniel/Desktop/coll.gif)
+
 > [DHMovableExtensionDemo](https://github.com/DanielHusx/DHMovableExtension)
+
