@@ -275,10 +275,7 @@ typedef NS_ENUM(NSUInteger, DHMoveDirection) {
         
     } else {
         // 默认的交换数据方式
-        BOOL dataExist = self.movableDataSource && [self.movableDataSource respondsToSelector:@selector(movable_dataSource:)];
-        BOOL exchangeExist = self.movableDataSource && [self.movableDataSource respondsToSelector:@selector(movable_scrollView:dataSourceExchanged:)];
-        
-        NSAssert(dataExist && exchangeExist, @"-movable_dataSource:与-movable_scrollView:dataSourceExchanged:都必须实现");
+        NSAssert((self.movableDataSource && [self.movableDataSource respondsToSelector:@selector(movable_dataSource:)]) && (self.movableDataSource && [self.movableDataSource respondsToSelector:@selector(movable_scrollView:dataSourceExchanged:)]), @"-movable_dataSource:与-movable_scrollView:dataSourceExchanged:实现一个就都必须实现");
         
         // 获取数据源
         // 没办法验证数据的正确性，务必保证外部传参正确
