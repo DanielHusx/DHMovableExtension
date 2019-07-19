@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "DHMovableExtension"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "easy to make cell movable."
 
   # This description is used to generate tags and improve search results.
@@ -53,7 +53,7 @@ Pod::Spec.new do |spec|
   #  profile URL.
   #
 
-  spec.author             = { "Daniel" => "danielxing@163.com" }
+  spec.author             = { "DanielHusx" => "danielxing@163.com" }
   # Or just: spec.author    = "Daniel"
   # spec.authors            = { "Daniel" => "danielxing@163.com" }
   # spec.social_media_url   = "https://twitter.com/Daniel"
