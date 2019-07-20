@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "DHMovableExtension"
-  spec.version      = "1.0.1"
+  spec.version      = "1.0.2"
   spec.summary      = "easy to make cell movable."
 
   # This description is used to generate tags and improve search results.
@@ -80,7 +80,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/DanielHusx/DHMovableExtension.git", :tag => "v#{spec.version}" }
+  spec.source       = { :git => "https://github.com/DanielHusx/DHMovableExtension.git", :tag => "#{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
