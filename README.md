@@ -3,27 +3,47 @@
 优雅的长按Cell移动，针对UITableView与UICollectionView的Cell长按移动。
 - 耦合低，代码侵入性低
 - 支持分组移动
-- 可定制化移动，设置不可移动位置或不可交换位置
+- 可定制化移动，设置不可移动或不可交换的位置
 - 极易使用
+
+
+
+## 安装
+
+```shell
+pod 'DHMovableExtension'
+```
+
+- 当前版本：1.0.2
+
+
 
 ## 使用方式
 
+### 1. 引用头文件
+
 ```objective-c
-// 1. 引用
 #import "UIScrollView+DHMovableExtension.h"
+```
 
-// 2. 配置UITableView or UICollectionView必要参数
-self.tableView.movable = YES;
-self.tableView.dataSource = self;
+### 2. 配置UITableView/UICollectionView必要参数
 
-// 3. 实现movableDataSource代理即可
+```objective-c
+self.tableView.movable = YES;	// 必要开关
+self.tableView.movableDataSource = self;	// 数据源获取代理
+```
+
+### 3. 实现数据源（[DHMovableDataSource详细说明](#DHMovableDataSource说明)）
+
+```objective-c
+>> 其中self.data为UITableView/UICollectionView的数据数组
 - (NSArray *)movable_dataSource:(UIScrollView *)scrollView {
-		// dataSource为数据数组
-    return [self.dataSource copy];
+    return [self.data copy];
 }
+
 - (void)movable_scrollView:(UIScrollView *)scrollView dataSourceExchanged:(NSArray *)dataSource {
   	// 将重排后的数据重新赋值
-    self.dataSource = [dataSource copy];
+    self.dataSource = [data copy];
 }
 ```
 
@@ -38,57 +58,48 @@ self.tableView.dataSource = self;
 - `drawMovableCellBlock`: 绘制cell截图样式Block。参数是截图后的视图，即`UIImageView`，旨在修改样式，以区分静态的cell。其中此优先级最高，其次代理方法`-movable_scrollView:drawMovableCell:`。如若此block与代理方法都没有实现，将使用默认截图样式
 - `exchangeDataSourceBlock`: 交换数据源，切勿期间刷新数据
 
+
+
 ## DHMovableDataSource说明
 
+**注意：切勿在有关方法中调用UITableView/UICollectionView的刷新数据（如`-reloadData`）方法。因为此代理响应期间正处于手势Change状态，刷新数据状况将不可控。**
+
+
+
+### 默认交换数据方法（**注意：如使用，必须两个方法同时实现**）
+
+提供两种数据数组的交换方式：
+
+- 一种元素为非数组，例如：`@[@"1", @"2"]`
+- 一种元素为数组，例如：`@[@[@"0-0", @"0-1"], @[@"1-0"]]`
+
 ```objective-c
-
-/**
- 交换数据源
- 
- @note
- exchangeDataSourceBlock
- > movableDataSource: -movable_scrollView:exchangeDataSourceAtIndexPath:to:
- > movableDataSource: -movable_dataSource: & -movable_scrollView:dataSourceExchanged:
- 
- @attention 如果设置exchangeDataSourceBlock，此代理就不会调用
- */
-- (void)movable_scrollView:(UIScrollView *)scrollView exchangeDataSourceAtIndexPath:(NSIndexPath *)from to:(NSIndexPath *)to;
-
-/**
- 获取数据源
- 
- @attention 如实现此方法，同时也必须实现-movable_scrollView:dataSourceExchanged:
- */
+/** UITableView/UICollectionView数据数组 -- 交换前 */
 - (NSArray *)movable_dataSource:(UIScrollView *)scrollView;
-/**
- 交换之后的数据反馈
- 
- @attention 如实现此方法，同时也必须实现-movable_dataSource:
- */
+/** 交换后数据反馈 -- 一般操作为重新复制给 原数据对象 */
 - (void)movable_scrollView:(UIScrollView *)scrollView dataSourceExchanged:(NSArray *)dataSource;
 ```
 
-以上三个方法都是为了在移动过程中，处理数据交换。
 
-其中最省心省力的方法是实现两个方法`-movable_dataSource:`与`-movable_scrollView:dataSourceExchanged`。提供数据源数组(`-movable_dataSource:`)，内部将会自动处理数据交换，处理结束后返回已修改的数据(`-movable_scrollView:dataSourceExchanged:`) 以此通知外部该更新数据。
 
-另外内部自动处理的数组只有两种。一种元素为非数组，例如：`@[@"1", @"2"]`；一种元素为数组，例如：`@[@[@"0-0", @"0-1"], @[@"1-0"]]`
+### 自定义交换数据方法
 
-**注意：请勿在以上三个处理数据交换方法中调用`reloadData`方法，因为还在移动过程中，期间刷新，可能产生未知后果**
+```objective-c
+/// 如设置此变量，将优先只用此block进行交换数据，不用movableDataSource代理
+@property (nonatomic, copy) void(^exchangeDataSourceBlock) (NSIndexPath *from, NSIndexPath *to);
+/// 效果同exchangeDataSourceBlock
+- (void)movable_scrollView:(UIScrollView *)scrollView exchangeDataSourceAtIndexPath:(NSIndexPath *)from to:(NSIndexPath *)to;
+```
 
 
 
 ## DHMovableDelegate 说明
 
 ```objective-c
-/**
- 判断两个位置的cell是否可以替换
- */
+/** 判断两个位置的cell是否可以替换 */
 - (BOOL)movable_scrollView:(UIScrollView *)scrollView isCellExchangeableFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 
-/**
- 判断某个IndexPath的cell是否可以移动
- */
+/** 判断某个IndexPath的cell是否可以移动 */
 - (BOOL)movable_scrollView:(UIScrollView *)scrollView isCellMovableAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
@@ -99,9 +110,7 @@ self.tableView.dataSource = self;
  */
 - (void)movable_scrollView:(UIScrollView *)scrollView movableCell:(UIView *)movableCell willMoveFromIndexPath:(NSIndexPath *)indexPath;
 
-/**
- 完成一次cell从from到to的移动
- */
+/** 完成一次cell从from到to的移动 */
 - (void)movable_scrollView:(UIScrollView *)scrollView cellDidMovedFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 
 /**
@@ -137,3 +146,8 @@ self.tableView.dataSource = self;
 
 > [DHMovableExtensionDemo](https://github.com/DanielHusx/DHMovableExtension)
 
+
+
+如果你觉得好用，请**Star**，谢谢！
+
+> [许可证](https://github.com/DanielHusx/DHMovableExtension/blob/master/LISCENSE)
