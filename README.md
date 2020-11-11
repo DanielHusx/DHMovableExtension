@@ -36,7 +36,10 @@ self.tableView.movableDataSource = self;	// 数据源获取代理
 ### 3. 实现数据源（[DHMovableDataSource详细说明](#DHMovableDataSource说明)）
 
 ```objective-c
->> 其中self.data为UITableView/UICollectionView的数据数组
+> 推荐使用exchangeDataSourceBlock(from, to) 或 -movableDataSource: -movable_scrollView:exchangeDataSourceAtIndexPath:to: 自定义实现数据交换
+
+> 数据量小的情况下可使用以下默认方式，因为存在数据拷贝，可能影响效率
+> 其中self.data为UITableView/UICollectionView的数据数组
 - (NSArray *)movable_dataSource:(UIScrollView *)scrollView {
     return [self.data copy];
 }

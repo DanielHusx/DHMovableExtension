@@ -289,7 +289,8 @@ typedef NS_ENUM(NSUInteger, DHMoveDirection) {
         
         if (mutiSectionCheck) {
             // 将子数组 设置 为可变数组
-            for (int i = 0; i < temp.count; i ++) {
+            for (int i = 0; i < temp.count; i++) {
+                if ([temp isKindOfClass:[NSMutableArray class]]) { continue; }
                 [temp replaceObjectAtIndex:i withObject:[temp[i] mutableCopy]];
             }
         }
